@@ -37,10 +37,10 @@ namespace BestPrice
                 if (contractType != null)
                 {
                     foreach (var rule in contractType.ContractRules.Where(_ =>
-                        (_.AttributeName == "Sku" && item.Sku == _.AttributeValue) ||
-                        (_.AttributeName == "ProductType" && item.ProductType == _.AttributeValue) ||
-                        (_.AttributeName == "ProductGroup" && item.ProductGroup == _.AttributeValue) ||
-                        (_.AttributeName == "ProductLine" && item.ProductLine == _.AttributeValue)
+                        (_.AttributeName == Constants.Sku && item.Sku == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductType && item.ProductType == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductGroup && item.ProductGroup == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductLine && item.ProductLine == _.AttributeValue)
                     ))
                     {
                         var calculatedPrice = item.ListPrice - (item.ListPrice * rule.DiscountValue / 100);
