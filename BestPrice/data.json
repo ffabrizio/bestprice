@@ -1,0 +1,57 @@
+{
+  "ContractTypes": [
+    {
+      "ContractTypeId": "10to20PC",
+      "ContractRules": [
+        {
+          "AttributeName": "ProductLine",
+          "AttributeValue": "Line1",
+          "DiscountValue": 10.0,
+          "Quantity": 1.0
+        },
+        {
+          "AttributeName": "ProductGroup",
+          "AttributeValue": "Group1",
+          "DiscountValue": 15.0,
+          "Quantity": 1.0
+        },
+        {
+          "AttributeName": "ProductType",
+          "AttributeValue": "Type1",
+          "DiscountValue": 20.0,
+          "Quantity": 1.0
+        }
+      ]
+    },
+    {
+      "ContractTypeId": "15PC",
+      "ContractRules": [
+        {
+          "AttributeName": "Sku",
+          "AttributeValue": "Sku1",
+          "DiscountValue": 15.0,
+          "Quantity": 1.0
+        }
+      ]
+    }
+  ],
+  "CustomerPrices": [
+    {
+      "CustomerNumber": "Customer1",
+      "ContractedPrices": [
+        {
+          "Sku": "Sku2",
+          "IsPercentageValue": true,
+          "DiscountValue": 5.0,
+          "Quantity": 1.0
+        },
+        {
+          "Sku": "Sku3",
+          "IsPercentageValue": false,
+          "DiscountValue": 950.0,
+          "Quantity": 1.0
+        }
+      ]
+    }
+  ]
+}
