@@ -24,10 +24,10 @@ namespace BestPrice
             // The request should be awaited
 
             // Just load all the data for the requested 'contractTypeId'
-            var contractType = _repository.GetContractType(req.ContractTypeId);
+            var contractType = await _repository.GetContractType(req.ContractTypeId);
 
             // Just load all the data for the requested 'customerNumber'
-            var customerPrices = _repository.GetCustomerPrices(req.CustomerNumber);     
+            var customerPrices = await _repository.GetCustomerPrices(req.CustomerNumber);     
 
             // Prepare the response, all best prices are set to the list prices
             var res = new CalculationResponse

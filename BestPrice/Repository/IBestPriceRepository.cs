@@ -1,10 +1,11 @@
 ﻿using BestPrice.Models;
+using System.Threading.Tasks;
 
 namespace BestPrice.Repository
 {
     public interface IBestPriceRepository
     {
-        ContractType GetContractType(string contractTypeId);
-        CustomerPrices GetCustomerPrices(string contractTypeId);
+        Task<ContractType> GetContractType(string contractTypeId);
+        Task<CustomerPrices> GetCustomerPrices(string contractTypeId);
     }
 }
