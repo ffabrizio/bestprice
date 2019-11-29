@@ -22,12 +22,22 @@ namespace BestPrice.Repository
 
         public ContractType GetContractType(string contractTypeId)
         {
+            if (string.IsNullOrEmpty(contractTypeId))
+            {
+                return null;
+            }
+
             var data = LoadRepository();
             return data.ContractTypes.FirstOrDefault(_ => _.ContractTypeId == contractTypeId);
         }
 
         public CustomerPrices GetCustomerPrices(string customerNumber)
         {
+            if (string.IsNullOrEmpty(customerNumber))
+            {
+                return null;
+            }
+
             var data = LoadRepository();
             return data.CustomerPrices.FirstOrDefault(_ => _.CustomerNumber == customerNumber);
         }
