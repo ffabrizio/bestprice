@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Comment CommentText="Api request">
+    <Position X="0.51" Y="4.792" Height="0.323" Width="0.981" />
+  </Comment>
+  <Comment CommentText="Api response">
+    <Position X="3.76" Y="3.75" Height="0.323" Width="1.148" />
+  </Comment>
+  <Comment CommentText="Contract type rules">
+    <Position X="11.417" Y="0.563" Height="0.323" Width="1.502" />
+  </Comment>
+  <Comment CommentText="Contracted price rules">
+    <Position X="11.604" Y="4.021" Height="0.323" Width="1.429" />
+  </Comment>
+  <Class Name="BestPrice.CalculationRequest">
+    <Position X="0.5" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACACAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>CalculationRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.CalculationInput">
+    <Position X="0.5" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAQAAQAAABAAAAAAAAAAAAAAAAAEAAAgAAAAAA=</HashCode>
+      <FileName>Models\CalculationInput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.CalculationResponse">
+    <Position X="3.75" Y="0.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CalculationResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.CalculationOutput">
+    <Position X="3.75" Y="2" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAACAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Models\CalculationOutput.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.CustomerPrices">
+    <Position X="8" Y="4" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\CustomerPrices.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.ContractType">
+    <Position X="8" Y="0.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Models\ContractType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.ContractedPrice">
+    <Position X="8" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAIAAAAAAAAAAAAAAEAAAgAAAAAA=</HashCode>
+      <FileName>Models\ContractedPrice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BestPrice.Models.ContractRule">
+    <Position X="8" Y="2" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAIAAAAAAAAEAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Models\ContractRule.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
