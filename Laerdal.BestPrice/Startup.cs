@@ -29,7 +29,7 @@ namespace Laerdal.BestPrice
             var cosmosSettings = new CosmosSettings();
             config.GetSection("CosmosDbSettings").Bind(cosmosSettings);
             var cosmosInstance = CosmosInitializer.Initialize(cosmosSettings);
-            
+
             builder.Services.AddSingleton(cosmosInstance);
             builder.Services.AddSingleton<ICalculator, Calculator>();
             builder.Services.AddTransient<IConfigureOptions<MvcOptions>, MvcJsonMvcOptionsSetup>();

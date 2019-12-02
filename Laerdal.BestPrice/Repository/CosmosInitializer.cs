@@ -10,7 +10,7 @@ namespace Laerdal.BestPrice.Repository
             var client = clientBuilder.WithConnectionModeDirect().Build();
             var repository = new CosmosRepository(client, settings.DatabaseName, settings.ContainerName);
             var database = client.CreateDatabaseIfNotExistsAsync(settings.DatabaseName).GetAwaiter().GetResult();
-            
+
             database.Database.CreateContainerIfNotExistsAsync(settings.ContainerName, "/pk", 1000)
                 .GetAwaiter()
                 .GetResult();

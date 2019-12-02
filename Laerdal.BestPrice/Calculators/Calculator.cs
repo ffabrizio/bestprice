@@ -1,6 +1,7 @@
 ﻿using Laerdal.BestPrice.Models;
 using Laerdal.BestPrice.Repository;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,22 +31,15 @@ namespace Laerdal.BestPrice.Calculators
             var customerPrices = await _repository.GetCustomerPricesAsync(req.CustomerNumber);
 
             // Prepare the response, all best prices are set to the list prices
+            var inputs = new List<CalculationInput>(req.Items);
             var res = new CalculationResponse
             {
-                Items = req.Items.Select(_ => new CalculationOutput
-                {
-                    Sku = _.Sku,
-                    ListPrice = _.ListPrice,
-                    BestPrice = _.ListPrice
-                }).ToArray()
+                Items = req.Items.Select(_ => new CalculationOutput(_)).ToArray()
             };
 
             // Loop through the items asynchronously
-            Parallel.ForEach(req.Items, item =>
+            Parallel.ForEach(res.Items, item =>
             {
-                // Find the current sku
-                var calculationOutput = res.Items.FirstOrDefault(_ => _.Sku == item.Sku);
-
                 _logger.LogInformation("[{sku}] Calculating best price [{listPrice}]", item.Sku, item.ListPrice);
 
                 if (contractType?.ContractRules != null)
@@ -56,9 +50,9 @@ namespace Laerdal.BestPrice.Calculators
                     // Could this be generic without using reflection?
                     foreach (var rule in contractType.ContractRules.Where(_ =>
                         _.AttributeName == Constants.Sku && item.Sku == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductType && item.ProductType == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductGroup && item.ProductGroup == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductLine && item.ProductLine == _.AttributeValue
+                        _.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue ||
+                        _.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue ||
+                        _.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue
                     ))
                     {
                         var calculatedPrice = item.ListPrice - item.ListPrice * rule.DiscountValue / 100;
@@ -66,16 +60,16 @@ namespace Laerdal.BestPrice.Calculators
                         _logger.LogInformation("[{sku}] Contract type price: {calculatedPrice}. [{productType}, {productGroup}, {productLine}]",
                             item.Sku,
                             calculatedPrice,
-                            item.ProductType,
-                            item.ProductGroup,
-                            item.ProductLine);
+                            item.CalculationInput.ProductType,
+                            item.CalculationInput.ProductGroup,
+                            item.CalculationInput.ProductLine);
 
-                        if (calculatedPrice > 0 && calculatedPrice < calculationOutput.BestPrice)
+                        if (calculatedPrice > 0 && calculatedPrice < item.BestPrice)
                         {
                             _logger.LogInformation("[{sku}] New best price: {calculatedPrice}", item.Sku, calculatedPrice);
 
                             // Replace the current best price if lower
-                            calculationOutput.BestPrice = calculatedPrice;
+                            item.BestPrice = calculatedPrice;
                         }
                     }
                 }
@@ -93,12 +87,12 @@ namespace Laerdal.BestPrice.Calculators
 
                         _logger.LogInformation("[{sku}] Contracted price: {calculatedPrice}", item.Sku, calculatedPrice);
 
-                        if (calculatedPrice > 0 && calculatedPrice < calculationOutput.BestPrice)
+                        if (calculatedPrice > 0 && calculatedPrice < item.BestPrice)
                         {
                             _logger.LogInformation("[{sku}] New best price: {calculatedPrice}", item.Sku, calculatedPrice);
 
                             // Replace the current best price if lower
-                            calculationOutput.BestPrice = calculatedPrice;
+                            item.BestPrice = calculatedPrice;
                         }
                     }
                 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Laerdal.BestPrice.Repository
+﻿namespace Laerdal.BestPrice.Repository
 {
     public class CosmosSettings
     {

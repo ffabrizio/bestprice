@@ -1,9 +1,9 @@
-using System.Threading.Tasks;
+using Laerdal.BestPrice.Calculators;
+using Laerdal.BestPrice.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Laerdal.BestPrice.Models;
-using Laerdal.BestPrice.Calculators;
+using System.Threading.Tasks;
 
 namespace Laerdal.BestPrice
 {
