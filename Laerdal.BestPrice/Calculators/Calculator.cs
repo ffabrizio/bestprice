@@ -1,7 +1,6 @@
 ﻿using Laerdal.BestPrice.Models;
 using Laerdal.BestPrice.Repository;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,24 +19,21 @@ namespace Laerdal.BestPrice.Calculators
 
         public async Task<CalculationResponse> Calculate(CalculationRequest req)
         {
-            // Make a request to the repository and load rules for attribute-pricing and overriden prices on individual skus
-            // It should be fast to load from a key/value store (e.g. Cosmos) but also SQL queries
-            // The request should be awaited
+            // Make a request to the repository and load rules for contract type and best prices on individual SKUs
 
-            // Just load all the data for the requested 'contractTypeId'
+            // Load all the rules for the requested 'contractTypeId'
             var contractType = await _repository.GetContractTypeAsync(req.ContractTypeId);
 
-            // Just load all the data for the requested 'customerNumber'
+            // Load all the prices for the requested 'customerNumber'
             var customerPrices = await _repository.GetCustomerPricesAsync(req.CustomerNumber);
 
             // Prepare the response, all best prices are set to the list prices
-            var inputs = new List<CalculationInput>(req.Items);
             var res = new CalculationResponse
             {
                 Items = req.Items.Select(_ => new CalculationOutput(_)).ToArray()
             };
 
-            // Loop through the items asynchronously
+            // Loop through the items in parallel
             Parallel.ForEach(res.Items, item =>
             {
                 _logger.LogInformation("[{sku}] Calculating best price [{listPrice}]", item.Sku, item.ListPrice);
@@ -46,18 +42,17 @@ namespace Laerdal.BestPrice.Calculators
                 {
                     _logger.LogInformation("Found contract type {contractType}", req.ContractTypeId);
 
-                    // Process all rules matching one of configured properties in the current sku
-                    // Could this be generic without using reflection?
+                    // Process all rules matching one of configured properties in the current SKU
                     foreach (var rule in contractType.ContractRules.Where(_ =>
-                        _.AttributeName == Constants.Sku && item.Sku == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue ||
-                        _.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue
+                        (_.AttributeName == Constants.Sku && item.Sku == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue) ||
+                        (_.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue)
                     ))
                     {
                         var calculatedPrice = item.ListPrice - item.ListPrice * rule.DiscountValue / 100;
 
-                        _logger.LogInformation("[{sku}] Contract type price: {calculatedPrice}. [{productType}, {productGroup}, {productLine}]",
+                        _logger.LogInformation("[{sku}] Contract type price: {calculatedPrice}. {rule}",
                             item.Sku,
                             calculatedPrice,
                             item.CalculationInput.ProductType,
@@ -78,7 +73,7 @@ namespace Laerdal.BestPrice.Calculators
                 {
                     _logger.LogInformation("Found customer prices for customer number: {customerNumber}", req.CustomerNumber);
 
-                    // Process all contracted prices for the current sku
+                    // Process all contracted prices for the current SKU
                     foreach (var contractedPrice in customerPrices.ContractedPrices.Where(_ => _.Sku == item.Sku))
                     {
                         var calculatedPrice = contractedPrice.IsPercentageValue ?

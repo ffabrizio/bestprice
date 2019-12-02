@@ -9,7 +9,7 @@
 
         public override string ToString()
         {
-            return $"[{AttributeName} = {AttributeValue}] {DiscountValue}%";
+            return $"[{AttributeName} / {AttributeValue}] {DiscountValue}%";
         }
     }
 }
