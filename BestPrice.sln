@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BestPrice", "BestPrice\BestPrice.csproj", "{7661D300-3BD5-4838-B0AB-71345B0915BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BestPrice", "BestPrice\BestPrice.csproj", "{7661D300-3BD5-4838-B0AB-71345B0915BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laerdal.BestPrice", "Laerdal.BestPrice\Laerdal.BestPrice.csproj", "{37671FAD-6849-48A0-8E04-69F34FFD75E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7661D300-3BD5-4838-B0AB-71345B0915BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7661D300-3BD5-4838-B0AB-71345B0915BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7661D300-3BD5-4838-B0AB-71345B0915BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37671FAD-6849-48A0-8E04-69F34FFD75E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37671FAD-6849-48A0-8E04-69F34FFD75E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37671FAD-6849-48A0-8E04-69F34FFD75E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37671FAD-6849-48A0-8E04-69F34FFD75E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
