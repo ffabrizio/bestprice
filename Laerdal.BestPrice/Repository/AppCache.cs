@@ -29,7 +29,6 @@ namespace Laerdal.BestPrice.Repository
             }
         }
 
-
         public static CustomerPrices GetCustomerPrices(string customerNumber)
         {
             return CustomerPrices.FirstOrDefault(_ => _.CustomerNumber == customerNumber);
