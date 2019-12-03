@@ -16,9 +16,9 @@ namespace Laerdal.BestPrice
             _calculator = calculator;
         }
 
-        [FunctionName("bestprice")]
+        [FunctionName("BestPrice")]
         public async Task<CalculationResponse> CalculateBestPrice(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = "bestprice")]
             CalculationRequest req,
             ILogger log)
         {

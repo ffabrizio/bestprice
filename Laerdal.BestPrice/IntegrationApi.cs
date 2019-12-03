@@ -3,6 +3,7 @@ using Laerdal.BestPrice.Repository;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Laerdal.BestPrice
@@ -17,8 +18,21 @@ namespace Laerdal.BestPrice
 
         }
 
-        [FunctionName("updatecontract")]
-        public async Task<UpdateResponse> UpdateContract(
+        [FunctionName("GetContract")]
+        public async Task<ContractType> GetContract(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "contract/{id}")]
+            HttpRequestMessage req,
+            string id,
+            ILogger log)
+        {
+
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            return await _repository.GetContractTypeAsync(id);
+        }
+
+        [FunctionName("UpdateContract")]
+        public async Task<BatchOutput> UpdateContract(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "contract/update")]
             ContractType req,
             ILogger log)
@@ -26,39 +40,46 @@ namespace Laerdal.BestPrice
 
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            await _repository.UpsertContractTypeAsync(req);
-
-            return new UpdateResponse { Success = true };
+            return await _repository.UpsertContractTypeAsync(req);
         }
 
-        [FunctionName("deletecontract")]
-        public async Task<UpdateResponse> DeleteContract(
+        [FunctionName("DeleteContract")]
+        public async Task<BatchOutput> DeleteContract(
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "contract/delete")]
             ContractType req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            await _repository.DeleteContractTypeAsync(req.ContractTypeId);
-
-            return new UpdateResponse { Success = true };
+            return await _repository.DeleteContractTypeAsync(req.ContractTypeId);
         }
 
-        [FunctionName("updatecustomerprices")]
-        public async Task<UpdateResponse> UpdateCustomerPrices(
+        [FunctionName("GetCustomerPrices")]
+        public async Task<CustomerPrices> GetCustomerPrices(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "customer/{id}")]
+            HttpRequestMessage req,
+            string id,
+            ILogger log)
+        {
+
+            log.LogInformation("C# HTTP trigger function processed a request.");
+
+            return await _repository.GetCustomerPricesAsync(id);
+        }
+
+        [FunctionName("UpdateCustomerPrices")]
+        public async Task<BatchOutput> UpdateCustomerPrices(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = "customer/update")]
             CustomerPrices req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            await _repository.UpsertCustomerPricesAsync(req);
-
-            return new UpdateResponse { Success = true };
+            return await _repository.UpsertCustomerPricesAsync(req);
         }
 
-        [FunctionName("deletecustomerprices")]
-        public async Task<UpdateResponse> DeleteCustomerPrices(
+        [FunctionName("DeleteCustomerPrices")]
+        public async Task<BatchOutput> DeleteCustomerPrices(
             [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "customer/delete")]
             CustomerPrices req,
             ILogger log)
@@ -66,9 +87,7 @@ namespace Laerdal.BestPrice
 
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            await _repository.DeleteCustomerPricesAsync(req.CustomerNumber);
-
-            return new UpdateResponse { Success = true };
+            return await _repository.DeleteCustomerPricesAsync(req.CustomerNumber);
         }
     }
 }

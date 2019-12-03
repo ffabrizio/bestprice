@@ -7,9 +7,9 @@ namespace Laerdal.BestPrice.Repository
     {
         Task<ContractType> GetContractTypeAsync(string contractTypeId);
         Task<CustomerPrices> GetCustomerPricesAsync(string contractTypeId);
-        Task UpsertContractTypeAsync(ContractType item);
-        Task DeleteContractTypeAsync(string contractTypeId);
-        Task UpsertCustomerPricesAsync(CustomerPrices item);
-        Task DeleteCustomerPricesAsync(string customerNumber);
+        Task<BatchOutput> UpsertContractTypeAsync(ContractType item);
+        Task<BatchOutput> DeleteContractTypeAsync(string contractTypeId);
+        Task<BatchOutput> UpsertCustomerPricesAsync(CustomerPrices item);
+        Task<BatchOutput> DeleteCustomerPricesAsync(string customerNumber);
     }
 }

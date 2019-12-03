@@ -27,11 +27,12 @@ namespace Laerdal.BestPrice
                 .AddEnvironmentVariables()
                 .Build();
 
-            var cosmosSettings = new CosmosSettings();
-            config.GetSection("CosmosDbSettings").Bind(cosmosSettings);
-            var cosmosInstance = CosmosInitializer.Initialize(cosmosSettings);
-
-            builder.Services.AddSingleton(cosmosInstance);
+            builder.Services.AddSingleton((provider) => {
+                var cosmosSettings = new CosmosSettings();
+                config.GetSection("CosmosDbSettings").Bind(cosmosSettings);
+                var cosmosInstance = CosmosInitializer.Initialize(cosmosSettings);
+                return cosmosInstance;
+            });
             builder.Services.AddSingleton<ICalculator, Calculator>();
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, MvcJsonMvcOptionsSetup>());
         }

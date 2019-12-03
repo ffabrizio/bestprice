@@ -97,11 +97,11 @@ namespace Laerdal.BestPrice.Repository
             return customerPrices;
         }
 
-        public async Task UpsertContractTypeAsync(ContractType item)
+        public async Task<BatchOutput> UpsertContractTypeAsync(ContractType item)
         {
-            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
                 partitionKey: new PartitionKey(item.ContractTypeId),
-                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{item.ContractTypeId}'" });
+                parameters: new dynamic[] { item.ContractTypeId });
 
             foreach (var rule in item.ContractRules)
             {
@@ -116,25 +116,38 @@ namespace Laerdal.BestPrice.Repository
                 };
 
                 await _container.CreateItemAsync(updatedItem);
+                result.Resource.Added++;
             }
 
             AppCache.DeleteContractType(item.ContractTypeId);
+            if (result.Resource.Deleted > 0)
+            {
+                result.Resource.Message = $"Updated contract rules for contract [{item.ContractTypeId}]";
+            }
+            else
+            {
+                result.Resource.Message = $"Created contract rules for contract [{item.ContractTypeId}]";
+            }
+
+            return result.Resource;
         }
 
-        public async Task DeleteContractTypeAsync(string contractTypeId)
+        public async Task<BatchOutput> DeleteContractTypeAsync(string contractTypeId)
         {
-            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
                 partitionKey: new PartitionKey(contractTypeId),
-                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{contractTypeId}'" });
+                parameters: new dynamic[] { contractTypeId });
 
             AppCache.DeleteContractType(contractTypeId);
+            result.Resource.Message = $"Deleted contract rules for contract [{contractTypeId}]";
+            return result.Resource;
         }
 
-        public async Task UpsertCustomerPricesAsync(CustomerPrices item)
+        public async Task<BatchOutput> UpsertCustomerPricesAsync(CustomerPrices item)
         {
-            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
                 partitionKey: new PartitionKey(item.CustomerNumber),
-                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{item.CustomerNumber}'" });
+                parameters: new dynamic[] { item.CustomerNumber });
 
             foreach (var price in item.ContractedPrices)
             {
@@ -149,18 +162,31 @@ namespace Laerdal.BestPrice.Repository
                 };
 
                 await _container.CreateItemAsync(updatedItem);
+                result.Resource.Added++;
             }
 
             AppCache.DeleteCustomerPrices(item.CustomerNumber);
+            if (result.Resource.Deleted > 0)
+            {
+                result.Resource.Message = $"Updated contracted prices for customer [{item.CustomerNumber}]";
+            }
+            else
+            {
+                result.Resource.Message = $"Created contracted prices for customer [{item.CustomerNumber}]";
+            }
+
+            return result.Resource;
         }
 
-        public async Task DeleteCustomerPricesAsync(string customerNumber)
+        public async Task<BatchOutput> DeleteCustomerPricesAsync(string customerNumber)
         {
-            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
                 partitionKey: new PartitionKey(customerNumber),
-                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{customerNumber}'" });
+                parameters: new dynamic[] { customerNumber });
 
             AppCache.DeleteCustomerPrices(customerNumber);
+            result.Resource.Message = $"Deleted contracted prices for customer [{customerNumber}]";
+            return result.Resource;
         }
     }
 }
