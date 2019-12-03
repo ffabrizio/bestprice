@@ -27,7 +27,6 @@ namespace Laerdal.BestPrice.Repository
             {
                 ContractTypes.Remove(existingContractType);
             }
-            ContractTypes.Remove(existingContractType);
         }
 
 
