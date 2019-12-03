@@ -1,11 +1,10 @@
-﻿using Laerdal.BestPrice.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace BestPrice.Models
+namespace Laerdal.BestPrice.Models
 {
     public class CustomerPrices
     {
         public string CustomerNumber { get; set; }
-        public IEnumerable<IContractedPrice> ContractedPrices { get; set; }
+        public IEnumerable<ContractedPrice> ContractedPrices { get; set; }
     }
 }

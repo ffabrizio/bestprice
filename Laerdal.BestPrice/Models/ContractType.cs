@@ -1,11 +1,10 @@
-﻿using Laerdal.BestPrice.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace BestPrice.Models
+namespace Laerdal.BestPrice.Models
 {
     public class ContractType
     {
         public string ContractTypeId { get; set; }
-        public IEnumerable<IContractRule> ContractRules { get; set; }
+        public IEnumerable<ContractRule> ContractRules { get; set; }
     }
 }

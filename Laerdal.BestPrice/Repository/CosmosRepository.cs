@@ -1,7 +1,7 @@
-﻿using BestPrice.Models;
-using Laerdal.BestPrice.Models;
+﻿using Laerdal.BestPrice.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +10,7 @@ namespace Laerdal.BestPrice.Repository
 {
     public class CosmosRepository : ICosmosRepository
     {
-        private Container _container;
+        private readonly Container _container;
 
         public CosmosRepository(
             CosmosClient client,
@@ -97,14 +97,70 @@ namespace Laerdal.BestPrice.Repository
             return customerPrices;
         }
 
-        public Task UpsertItemAsync<T>(T item)
+        public async Task UpsertContractTypeAsync(ContractType item)
         {
-            return Task.CompletedTask;
+            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+                partitionKey: new PartitionKey(item.ContractTypeId),
+                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{item.ContractTypeId}'" });
+
+            foreach (var rule in item.ContractRules)
+            {
+                var updatedItem = new ContractRuleEntity
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    PartitionKey = item.ContractTypeId,
+                    AttributeName = rule.AttributeName,
+                    AttributeValue = rule.AttributeValue,
+                    DiscountValue = rule.DiscountValue,
+                    Quantity = rule.Quantity
+                };
+
+                await _container.CreateItemAsync(updatedItem);
+            }
+
+            AppCache.DeleteContractType(item.ContractTypeId);
         }
 
-        public Task DeleteItemAsync<T>(T item)
+        public async Task DeleteContractTypeAsync(string contractTypeId)
         {
-            return Task.CompletedTask;
+            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+                partitionKey: new PartitionKey(contractTypeId),
+                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{contractTypeId}'" });
+
+            AppCache.DeleteContractType(contractTypeId);
+        }
+
+        public async Task UpsertCustomerPricesAsync(CustomerPrices item)
+        {
+            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+                partitionKey: new PartitionKey(item.CustomerNumber),
+                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{item.CustomerNumber}'" });
+
+            foreach (var price in item.ContractedPrices)
+            {
+                var updatedItem = new ContractedPriceEntity
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    PartitionKey = item.CustomerNumber,
+                    IsPercentageValue = price.IsPercentageValue,
+                    Sku = price.Sku,
+                    DiscountValue = price.DiscountValue,
+                    Quantity = price.Quantity
+                };
+
+                await _container.CreateItemAsync(updatedItem);
+            }
+
+            AppCache.DeleteCustomerPrices(item.CustomerNumber);
+        }
+
+        public async Task DeleteCustomerPricesAsync(string customerNumber)
+        {
+            await _container.Scripts.ExecuteStoredProcedureAsync<object>("bulk-delete",
+                partitionKey: new PartitionKey(customerNumber),
+                parameters: new dynamic[] { $"SELECT * FROM c WHERE c.pk = '{customerNumber}'" });
+
+            AppCache.DeleteCustomerPrices(customerNumber);
         }
     }
 }

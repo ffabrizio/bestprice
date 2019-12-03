@@ -1,4 +1,4 @@
-﻿using BestPrice.Models;
+﻿using Laerdal.BestPrice.Models;
 using System.Threading.Tasks;
 
 namespace Laerdal.BestPrice.Repository
@@ -7,7 +7,9 @@ namespace Laerdal.BestPrice.Repository
     {
         Task<ContractType> GetContractTypeAsync(string contractTypeId);
         Task<CustomerPrices> GetCustomerPricesAsync(string contractTypeId);
-        Task UpsertItemAsync<T>(T item);
-        Task DeleteItemAsync<T>(T item);
+        Task UpsertContractTypeAsync(ContractType item);
+        Task DeleteContractTypeAsync(string contractTypeId);
+        Task UpsertCustomerPricesAsync(CustomerPrices item);
+        Task DeleteCustomerPricesAsync(string customerNumber);
     }
 }

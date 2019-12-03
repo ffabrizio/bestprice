@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 [assembly: FunctionsStartup(typeof(Startup))]
@@ -32,7 +33,7 @@ namespace Laerdal.BestPrice
 
             builder.Services.AddSingleton(cosmosInstance);
             builder.Services.AddSingleton<ICalculator, Calculator>();
-            builder.Services.AddTransient<IConfigureOptions<MvcOptions>, MvcJsonMvcOptionsSetup>();
+            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, MvcJsonMvcOptionsSetup>());
         }
     }
 }

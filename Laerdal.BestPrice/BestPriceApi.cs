@@ -17,7 +17,7 @@ namespace Laerdal.BestPrice
         }
 
         [FunctionName("bestprice")]
-        public async Task<CalculationResponse> Run(
+        public async Task<CalculationResponse> CalculateBestPrice(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
             CalculationRequest req,
             ILogger log)

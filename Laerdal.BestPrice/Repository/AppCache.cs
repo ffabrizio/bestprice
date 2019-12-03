@@ -1,4 +1,4 @@
-﻿using BestPrice.Models;
+﻿using Laerdal.BestPrice.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -16,14 +16,20 @@ namespace Laerdal.BestPrice.Repository
 
         public static void SetContractType(ContractType contractType)
         {
-            var existingContractType = GetContractType(contractType.ContractTypeId);
+            DeleteContractType(contractType.ContractTypeId);
+            ContractTypes.Add(contractType);
+        }
+
+        public static void DeleteContractType(string contractTypeId)
+        {
+            var existingContractType = GetContractType(contractTypeId);
             if (existingContractType != null)
             {
                 ContractTypes.Remove(existingContractType);
             }
-
-            ContractTypes.Add(contractType);
+            ContractTypes.Remove(existingContractType);
         }
+
 
         public static CustomerPrices GetCustomerPrices(string customerNumber)
         {
@@ -32,15 +38,18 @@ namespace Laerdal.BestPrice.Repository
 
         public static void SetCustomerPrices(CustomerPrices customerPrices)
         {
-            var existingCustomerPrices = GetCustomerPrices(customerPrices.CustomerNumber);
+            DeleteCustomerPrices(customerPrices.CustomerNumber);
+            CustomerPrices.Add(customerPrices);
+        }
+
+        public static void DeleteCustomerPrices(string customerNumber)
+        {
+            var existingCustomerPrices = GetCustomerPrices(customerNumber);
             if (existingCustomerPrices != null)
             {
                 CustomerPrices.Remove(existingCustomerPrices);
             }
-
-            CustomerPrices.Add(customerPrices);
         }
-
 
     }
 }
