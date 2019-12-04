@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "56f0178e-e2d7-4566-bd5e-b229cd183314",
+		"name": "BestPrice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Customer Prices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:7071/api/customer/customer-with-discount",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"customer",
+						"customer-with-discount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer Prices",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerNumber\": \"customer-with-discount\",\r\n    \"contractedPrices\": [\r\n        {\r\n            \"sku\": \"sku-with-5pc-off\",\r\n            \"isPercentageValue\": true,\r\n            \"discountValue\": 5,\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"sku\": \"sku-with-20pc-off\",\r\n            \"isPercentageValue\": true,\r\n            \"discountValue\": 20,\r\n            \"quantity\": 1\r\n        },\r\n        {\r\n            \"sku\": \"sku-with-fixed-price-1750\",\r\n            \"isPercentageValue\": false,\r\n            \"discountValue\": 1750,\r\n            \"quantity\": 1\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/customer/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"customer",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Customer Prices",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customerNumber\": \"customer-with-discount\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/customer/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"customer",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Contract",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:7071/api/contract/contract-10to20pc-off",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"contract",
+						"contract-10to20pc-off"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Contract",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contractTypeId\": \"contract-10to20pc-off\",\n    \"contractRules\": [\n        {\n            \"attributeName\": \"ProductGroup\",\n            \"attributeValue\": \"fashion\",\n            \"discountValue\": 10,\n            \"quantity\": 1\n        },\n        {\n            \"attributeName\": \"ProductType\",\n            \"attributeValue\": \"shoes\",\n            \"discountValue\": 15,\n            \"quantity\": 1\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/contract/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"contract",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Contract",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contractTypeId\": \"contract-10to20pc-off\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/contract/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"contract",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"customerNumber\":\"customer-with-discount\",\n\t\"contractTypeId\":\"contract-10to20pc-off\",\n\t\"items\":\n\t[\n\t\t{\n\t\t\t\"sku\": \"sku-with-5pc-off\",\n\t\t\t\"listPrice\": 1000\n\t\t},\n\t\t{\n\t\t\t\"sku\": \"sku-with-5pc-off\",\n\t\t\t\"productGroup\": \"fashion\",\n\t\t\t\"listPrice\": 1000\n\t\t},\n\t\t{\n\t\t\t\"sku\": \"sku-no-discounts\",\n\t\t\t\"listPrice\": 1000\n\t\t},\n\t\t{\n\t\t\t\"sku\": \"sku-with-5pc-off\",\n\t\t\t\"listPrice\": 1000\n\t\t},\n\t\t{\n\t\t\t\"sku\": \"sku-with-20pc-off\",\n\t\t\t\"productGroup\": \"fashion\",\n\t\t\t\"productType\": \"shoes\",\n\t\t\t\"productLine\": \"andy-murray\",\n\t\t\t\"listPrice\": 1000\n\t\t}\n\t]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/bestprice",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"bestprice"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
