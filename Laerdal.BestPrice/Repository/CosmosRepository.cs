@@ -68,7 +68,6 @@ namespace Laerdal.BestPrice.Repository
                     .Where(b => b.PartitionKey == customerNumber)
                     .ToFeedIterator();
 
-
                 var contractedPrices = new List<ContractedPrice>();
 
                 while (iterator.HasMoreResults)
@@ -94,6 +93,7 @@ namespace Laerdal.BestPrice.Repository
 
                 AppCache.SetCustomerPrices(customerPrices);
             }
+
             return customerPrices;
         }
 

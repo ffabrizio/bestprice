@@ -1,4 +1,5 @@
-﻿using Laerdal.BestPrice.Models;
+﻿using Laerdal.BestPrice.Extensions;
+using Laerdal.BestPrice.Models;
 using Laerdal.BestPrice.Repository;
 using Microsoft.Extensions.Logging;
 using System.Linq;
@@ -43,21 +44,14 @@ namespace Laerdal.BestPrice.Calculators
                     _logger.LogInformation("Found contract type {contractType}", req.ContractTypeId);
 
                     // Process all rules matching one of configured properties in the current SKU
-                    foreach (var rule in contractType.ContractRules.Where(_ =>
-                        (_.AttributeName == Constants.Sku && item.Sku == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue)
-                    ))
+                    foreach (var rule in contractType.ContractRules.GetApplicableRules(item))
                     {
-                        var calculatedPrice = item.ListPrice - item.ListPrice * rule.DiscountValue / 100;
+                        var calculatedPrice = rule.CalculateDiscountedPrice(item);
 
                         _logger.LogInformation("[{sku}] Contract type price: {calculatedPrice}. {rule}",
                             item.Sku,
                             calculatedPrice,
-                            item.CalculationInput.ProductType,
-                            item.CalculationInput.ProductGroup,
-                            item.CalculationInput.ProductLine);
+                            rule);
 
                         if (calculatedPrice > 0 && calculatedPrice < item.BestPrice)
                         {
@@ -74,11 +68,9 @@ namespace Laerdal.BestPrice.Calculators
                     _logger.LogInformation("Found customer prices for customer number: {customerNumber}", req.CustomerNumber);
 
                     // Process all contracted prices for the current SKU
-                    foreach (var contractedPrice in customerPrices.ContractedPrices.Where(_ => _.Sku == item.Sku))
+                    foreach (var contractedPrice in customerPrices.ContractedPrices.GetApplicablePrices(item))
                     {
-                        var calculatedPrice = contractedPrice.IsPercentageValue ?
-                            item.ListPrice - item.ListPrice * contractedPrice.DiscountValue / 100 :
-                            contractedPrice.DiscountValue;
+                        var calculatedPrice = contractedPrice.CalculateDiscountedPrice(item);
 
                         _logger.LogInformation("[{sku}] Contracted price: {calculatedPrice}", item.Sku, calculatedPrice);
 
@@ -96,5 +88,7 @@ namespace Laerdal.BestPrice.Calculators
             // Return the response
             return res;
         }
+
+        
     }
 }

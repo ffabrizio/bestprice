@@ -22,7 +22,7 @@ namespace Laerdal.BestPrice
             CalculationRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {req.CustomerNumber}");
 
             var calculation = await _calculator.Calculate(req);
             return calculation;

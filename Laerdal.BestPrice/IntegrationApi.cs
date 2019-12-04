@@ -26,7 +26,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {id}");
 
             return await _repository.GetContractTypeAsync(id);
         }
@@ -38,7 +38,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {req.ContractTypeId}");
 
             return await _repository.UpsertContractTypeAsync(req);
         }
@@ -49,7 +49,7 @@ namespace Laerdal.BestPrice
             ContractType req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {req.ContractTypeId}");
 
             return await _repository.DeleteContractTypeAsync(req.ContractTypeId);
         }
@@ -62,7 +62,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {id}");
 
             return await _repository.GetCustomerPricesAsync(id);
         }
@@ -73,7 +73,7 @@ namespace Laerdal.BestPrice
             CustomerPrices req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {req.CustomerNumber}");
 
             return await _repository.UpsertCustomerPricesAsync(req);
         }
@@ -85,7 +85,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation($"Executing with input: {req.CustomerNumber}");
 
             return await _repository.DeleteCustomerPricesAsync(req.CustomerNumber);
         }
