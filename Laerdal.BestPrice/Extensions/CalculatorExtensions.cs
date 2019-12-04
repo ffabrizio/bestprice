@@ -9,11 +9,13 @@ namespace Laerdal.BestPrice.Extensions
         public static IEnumerable<ContractRule> GetApplicableRules(this IEnumerable<ContractRule> contractRules, CalculationOutput item)
         {
             return contractRules.Where(_ =>
-                        (_.AttributeName == Constants.Sku && item.Sku == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue) ||
-                        (_.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue)
-                    );
+                (_.AttributeName == Constants.Sku && item.Sku == _.AttributeValue) ||
+                (_.AttributeName == Constants.ProductType && item.CalculationInput.ProductType == _.AttributeValue) ||
+                (_.AttributeName == Constants.ProductGroup && item.CalculationInput.ProductGroup == _.AttributeValue) ||
+                (_.AttributeName == Constants.ProductLine && item.CalculationInput.ProductLine == _.AttributeValue)
+            );
+
+            // Quantities and expiry dates could be handled in here
         }
 
         public static decimal CalculateDiscountedPrice(this ContractRule rule, CalculationOutput item)
@@ -24,6 +26,8 @@ namespace Laerdal.BestPrice.Extensions
         public static IEnumerable<ContractedPrice> GetApplicablePrices(this IEnumerable<ContractedPrice> contractedPrices, CalculationOutput item)
         {
             return contractedPrices.Where(_ => _.Sku == item.Sku);
+
+            // Quantities and expiry dates could be handled in here
         }
 
         public static decimal CalculateDiscountedPrice(this ContractedPrice contractedPrice, CalculationOutput item)
