@@ -1,4 +1,3 @@
-//copied from here 
 //https://stackoverflow.com/questions/29137708/how-to-delete-all-the-documents-in-documentdb-through-c-sharp-code
 //https://stackoverflow.com/questions/43587572/how-to-clear-the-collection-in-documentdb-through-query-explorer
 
