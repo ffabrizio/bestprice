@@ -1,4 +1,6 @@
-﻿namespace Laerdal.BestPrice.Models
+﻿using System;
+
+namespace Laerdal.BestPrice.Models
 {
     public interface IContractRule
     {
@@ -6,5 +8,7 @@
         string AttributeValue { get; set; }
         decimal DiscountValue { get; set; }
         decimal Quantity { get; set; }
+        DateTime ValidFrom { get; set; }
+        DateTime ValidTo { get; set; }
     }
 }

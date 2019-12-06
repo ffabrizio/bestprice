@@ -41,7 +41,9 @@ namespace Laerdal.BestPrice.Repository
                                 AttributeName = item.AttributeName,
                                 AttributeValue = item.AttributeValue,
                                 DiscountValue = item.DiscountValue,
-                                Quantity = item.Quantity
+                                Quantity = item.Quantity,
+                                ValidFrom = item.ValidFrom,
+                                ValidTo = item.ValidTo
                             }
                         );
                     }
