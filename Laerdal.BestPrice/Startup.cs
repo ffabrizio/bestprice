@@ -27,7 +27,8 @@ namespace Laerdal.BestPrice
                 .AddEnvironmentVariables()
                 .Build();
 
-            builder.Services.AddSingleton((provider) => {
+            builder.Services.AddSingleton((provider) =>
+            {
                 var cosmosSettings = new CosmosSettings();
                 config.GetSection("CosmosDbSettings").Bind(cosmosSettings);
                 var cosmosInstance = CosmosInitializer.Initialize(cosmosSettings);

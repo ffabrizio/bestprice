@@ -1,8 +1,6 @@
 ﻿using Laerdal.BestPrice.Models;
 using Laerdal.BestPrice.Repository;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Laerdal.BestPrice.Extensions
 {

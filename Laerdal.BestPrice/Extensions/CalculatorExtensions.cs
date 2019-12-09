@@ -32,7 +32,7 @@ namespace Laerdal.BestPrice.Extensions
         }
 
         public static decimal CalculateDiscountedPrice(this ContractRule rule, CalculationOutput item)
-        { 
+        {
             return item.ListPrice - item.ListPrice * rule.DiscountValue / 100;
         }
 

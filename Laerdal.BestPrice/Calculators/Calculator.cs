@@ -89,6 +89,6 @@ namespace Laerdal.BestPrice.Calculators
             return res;
         }
 
-        
+
     }
 }
