@@ -1,4 +1,5 @@
-﻿using Laerdal.BestPrice.Models;
+﻿using Laerdal.BestPrice.Extensions;
+using Laerdal.BestPrice.Models;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using System;
@@ -35,17 +36,7 @@ namespace Laerdal.BestPrice.Repository
                 {
                     foreach (var item in await iterator.ReadNextAsync())
                     {
-                        contractRules.Add(
-                            new ContractRule
-                            {
-                                AttributeName = item.AttributeName,
-                                AttributeValue = item.AttributeValue,
-                                DiscountValue = item.DiscountValue,
-                                Quantity = item.Quantity,
-                                ValidFrom = item.ValidFrom,
-                                ValidTo = item.ValidTo
-                            }
-                        );
+                        contractRules.Add(item.ToModel());
                     }
                 }
 
@@ -76,17 +67,7 @@ namespace Laerdal.BestPrice.Repository
                 {
                     foreach (var item in await iterator.ReadNextAsync())
                     {
-                        contractedPrices.Add(
-                            new ContractedPrice
-                            {
-                                IsPercentageValue = item.IsPercentageValue,
-                                Sku = item.Sku,
-                                DiscountValue = item.DiscountValue,
-                                Quantity = item.Quantity,
-                                ValidFrom = item.ValidFrom,
-                                ValidTo = item.ValidTo
-                            }
-                        );
+                        contractedPrices.Add(item.ToModel());
                     }
                 }
                 customerPrices = new CustomerPrices
@@ -109,17 +90,7 @@ namespace Laerdal.BestPrice.Repository
 
             foreach (var rule in item.ContractRules)
             {
-                var updatedItem = new ContractRuleEntity
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    PartitionKey = item.ContractTypeId,
-                    AttributeName = rule.AttributeName,
-                    AttributeValue = rule.AttributeValue,
-                    DiscountValue = rule.DiscountValue,
-                    Quantity = rule.Quantity,
-                    ValidFrom = rule.ValidFrom > DateTime.MinValue ? rule.ValidFrom : DateTime.UtcNow,
-                    ValidTo = rule.ValidTo > DateTime.MinValue ? rule.ValidTo : DateTime.UtcNow.AddYears(1)
-                };
+                var updatedItem = rule.ToEntity(item.ContractTypeId);
 
                 await _container.CreateItemAsync(updatedItem);
                 result.Resource.Added++;
@@ -158,17 +129,7 @@ namespace Laerdal.BestPrice.Repository
 
             foreach (var price in item.ContractedPrices)
             {
-                var updatedItem = new ContractedPriceEntity
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    PartitionKey = item.CustomerNumber,
-                    IsPercentageValue = price.IsPercentageValue,
-                    Sku = price.Sku,
-                    DiscountValue = price.DiscountValue,
-                    Quantity = price.Quantity,
-                    ValidFrom = price.ValidFrom > DateTime.MinValue ? price.ValidFrom : DateTime.UtcNow,
-                    ValidTo = price.ValidTo > DateTime.MinValue ? price.ValidTo : DateTime.UtcNow.AddYears(1)
-                };
+                var updatedItem = price.ToEntity(item.CustomerNumber);
 
                 await _container.CreateItemAsync(updatedItem);
                 result.Resource.Added++;
