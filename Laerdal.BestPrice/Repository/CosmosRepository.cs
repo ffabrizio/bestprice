@@ -51,36 +51,6 @@ namespace Laerdal.BestPrice.Repository
             return contractType;
         }
 
-        public async Task<CustomerPrices> GetCustomerPricesAsync(string customerNumber)
-        {
-            var customerPrices = AppCache.GetCustomerPrices(customerNumber);
-            if (customerPrices == null)
-            {
-                var iterator = _container.GetItemLinqQueryable<ContractedPriceEntity>()
-                    .Where(b => b.PartitionKey == customerNumber)
-                    .ToFeedIterator();
-
-                var contractedPrices = new List<ContractedPrice>();
-
-                while (iterator.HasMoreResults)
-                {
-                    foreach (var item in await iterator.ReadNextAsync())
-                    {
-                        contractedPrices.Add(item.ToModel());
-                    }
-                }
-                customerPrices = new CustomerPrices
-                {
-                    CustomerNumber = customerNumber,
-                    ContractedPrices = contractedPrices
-                };
-
-                AppCache.SetCustomerPrices(customerPrices);
-            }
-
-            return customerPrices;
-        }
-
         public async Task<BatchOutput> UpsertContractTypeAsync(ContractType item)
         {
             var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
@@ -117,6 +87,36 @@ namespace Laerdal.BestPrice.Repository
             AppCache.DeleteContractType(contractTypeId);
             result.Resource.Message = $"Deleted contract rules for contract [{contractTypeId}]";
             return result.Resource;
+        }
+
+        public async Task<CustomerPrices> GetCustomerPricesAsync(string customerNumber)
+        {
+            var customerPrices = AppCache.GetCustomerPrices(customerNumber);
+            if (customerPrices == null)
+            {
+                var iterator = _container.GetItemLinqQueryable<ContractedPriceEntity>()
+                    .Where(b => b.PartitionKey == customerNumber)
+                    .ToFeedIterator();
+
+                var contractedPrices = new List<ContractedPrice>();
+
+                while (iterator.HasMoreResults)
+                {
+                    foreach (var item in await iterator.ReadNextAsync())
+                    {
+                        contractedPrices.Add(item.ToModel());
+                    }
+                }
+                customerPrices = new CustomerPrices
+                {
+                    CustomerNumber = customerNumber,
+                    ContractedPrices = contractedPrices
+                };
+
+                AppCache.SetCustomerPrices(customerPrices);
+            }
+
+            return customerPrices;
         }
 
         public async Task<BatchOutput> UpsertCustomerPricesAsync(CustomerPrices item)
