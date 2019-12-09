@@ -82,7 +82,9 @@ namespace Laerdal.BestPrice.Repository
                                 IsPercentageValue = item.IsPercentageValue,
                                 Sku = item.Sku,
                                 DiscountValue = item.DiscountValue,
-                                Quantity = item.Quantity
+                                Quantity = item.Quantity,
+                                ValidFrom = item.ValidFrom,
+                                ValidTo = item.ValidTo
                             }
                         );
                     }
@@ -114,7 +116,9 @@ namespace Laerdal.BestPrice.Repository
                     AttributeName = rule.AttributeName,
                     AttributeValue = rule.AttributeValue,
                     DiscountValue = rule.DiscountValue,
-                    Quantity = rule.Quantity
+                    Quantity = rule.Quantity,
+                    ValidFrom = rule.ValidFrom > DateTime.MinValue ? rule.ValidFrom : DateTime.UtcNow,
+                    ValidTo = rule.ValidTo > DateTime.MinValue ? rule.ValidTo : DateTime.UtcNow.AddYears(1)
                 };
 
                 await _container.CreateItemAsync(updatedItem);
@@ -151,6 +155,7 @@ namespace Laerdal.BestPrice.Repository
                 partitionKey: new PartitionKey(item.CustomerNumber),
                 parameters: new dynamic[] { item.CustomerNumber });
 
+
             foreach (var price in item.ContractedPrices)
             {
                 var updatedItem = new ContractedPriceEntity
@@ -160,7 +165,9 @@ namespace Laerdal.BestPrice.Repository
                     IsPercentageValue = price.IsPercentageValue,
                     Sku = price.Sku,
                     DiscountValue = price.DiscountValue,
-                    Quantity = price.Quantity
+                    Quantity = price.Quantity,
+                    ValidFrom = price.ValidFrom > DateTime.MinValue ? price.ValidFrom : DateTime.UtcNow,
+                    ValidTo = price.ValidTo > DateTime.MinValue ? price.ValidTo : DateTime.UtcNow.AddYears(1)
                 };
 
                 await _container.CreateItemAsync(updatedItem);

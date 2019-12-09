@@ -8,8 +8,8 @@ namespace Laerdal.BestPrice.Models
         public string AttributeValue { get; set; }
         public decimal DiscountValue { get; set; }
         public decimal Quantity { get; set; } = 1;
-        public DateTime ValidFrom { get; set; } = DateTime.UtcNow;
-        public DateTime ValidTo { get; set; } = DateTime.UtcNow.AddYears(1);
+        public DateTime ValidFrom { get; set; }
+        public DateTime ValidTo { get; set; }
 
         public override string ToString()
         {
