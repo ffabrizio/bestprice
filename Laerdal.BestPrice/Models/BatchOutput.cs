@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Laerdal.BestPrice.Models
+﻿namespace Laerdal.BestPrice.Models
 {
     public class BatchOutput
     {
