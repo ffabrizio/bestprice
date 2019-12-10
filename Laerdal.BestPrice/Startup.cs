@@ -27,6 +27,7 @@ namespace Laerdal.BestPrice
                 .AddEnvironmentVariables()
                 .Build();
 
+            builder.Services.AddLogging();
             builder.Services.AddSingleton((provider) =>
             {
                 var cosmosSettings = new CosmosSettings();
