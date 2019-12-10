@@ -53,40 +53,25 @@ namespace Laerdal.BestPrice.Repository
 
         public async Task<BatchOutput> UpsertContractTypeAsync(ContractType item)
         {
-            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
-                partitionKey: new PartitionKey(item.ContractTypeId),
-                parameters: new dynamic[] { item.ContractTypeId });
+            var result = await DeleteAll(item.ContractTypeId);
 
             foreach (var rule in item.ContractRules)
             {
                 var updatedItem = rule.ToEntity(item.ContractTypeId);
 
                 await _container.CreateItemAsync(updatedItem);
-                result.Resource.Added++;
+                result.Added++;
             }
 
             AppCache.DeleteContractType(item.ContractTypeId);
-            if (result.Resource.Deleted > 0)
-            {
-                result.Resource.Message = $"Updated contract rules for contract [{item.ContractTypeId}]";
-            }
-            else
-            {
-                result.Resource.Message = $"Created contract rules for contract [{item.ContractTypeId}]";
-            }
-
-            return result.Resource;
+            return result;
         }
 
         public async Task<BatchOutput> DeleteContractTypeAsync(string contractTypeId)
         {
-            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
-                partitionKey: new PartitionKey(contractTypeId),
-                parameters: new dynamic[] { contractTypeId });
-
+            var result = await DeleteAll(contractTypeId);
             AppCache.DeleteContractType(contractTypeId);
-            result.Resource.Message = $"Deleted contract rules for contract [{contractTypeId}]";
-            return result.Resource;
+            return result;
         }
 
         public async Task<CustomerPrices> GetCustomerPricesAsync(string customerNumber)
@@ -121,41 +106,46 @@ namespace Laerdal.BestPrice.Repository
 
         public async Task<BatchOutput> UpsertCustomerPricesAsync(CustomerPrices item)
         {
-            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
-                partitionKey: new PartitionKey(item.CustomerNumber),
-                parameters: new dynamic[] { item.CustomerNumber });
-
-
+            var result = await DeleteAll(item.CustomerNumber);
             foreach (var price in item.ContractedPrices)
             {
                 var updatedItem = price.ToEntity(item.CustomerNumber);
 
                 await _container.CreateItemAsync(updatedItem);
-                result.Resource.Added++;
+                result.Added++;
             }
 
             AppCache.DeleteCustomerPrices(item.CustomerNumber);
-            if (result.Resource.Deleted > 0)
-            {
-                result.Resource.Message = $"Updated contracted prices for customer [{item.CustomerNumber}]";
-            }
-            else
-            {
-                result.Resource.Message = $"Created contracted prices for customer [{item.CustomerNumber}]";
-            }
-
-            return result.Resource;
+            return result;
         }
 
         public async Task<BatchOutput> DeleteCustomerPricesAsync(string customerNumber)
         {
-            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
-                partitionKey: new PartitionKey(customerNumber),
-                parameters: new dynamic[] { customerNumber });
+            var result = await DeleteAll(customerNumber);
 
             AppCache.DeleteCustomerPrices(customerNumber);
-            result.Resource.Message = $"Deleted contracted prices for customer [{customerNumber}]";
+            return result;
+        }
+
+        private async Task<BatchOutput> DeleteAll(string pk)
+        {
+            var result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
+                partitionKey: new PartitionKey(pk),
+                parameters: new dynamic[] { pk });
+
+            var deleted = result.Resource.Deleted;
+            while (result.Resource.Continuation)
+            {
+                result = await _container.Scripts.ExecuteStoredProcedureAsync<BatchOutput>(Constants.SpId,
+                    partitionKey: new PartitionKey(pk),
+                    parameters: new dynamic[] { pk });
+
+                result.Resource.Deleted = deleted + result.Resource.Deleted;
+                deleted = result.Resource.Deleted;
+            }
+
             return result.Resource;
         }
+
     }
 }
