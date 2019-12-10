@@ -41,15 +41,17 @@ function CreatePrice {
 function CreateRule {
  param( [object]$rule )
 
- $attrname = "ProductGroup"
- $attrvalue = $rule."Product Group"
+ if ($rule."Item Type") {
+    $attrname = "ProductType"
+    $attrvalue = $rule."Item Type"
+ }
  if ($rule."Product Line") {
     $attrname = "ProductLine"
     $attrvalue = $rule."Product Line"
  }
- if ($rule."Item Type") {
-    $attrname = "ProductType"
-    $attrvalue = $rule."Item Type"
+ if ($rule."Product Group") {
+    $attrname = "ProductGroup"
+    $attrvalue = $rule."Product Group"
  }
 
  $validfrom = (Get-Date)

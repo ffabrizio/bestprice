@@ -8,7 +8,7 @@ $ProgressPreference = "SilentlyContinue"
 function PushRuleData {
  param( [PSObject]$file )
  Write-Host "Processing " ($file.Name)
- $val = $data = Get-Content -Path ($file.FullName) | ConvertFrom-Json
+ $data = Get-Content -Path ($file.FullName) | ConvertFrom-Json
  
  Invoke-WebRequest -Uri $rulesApiEndpoint -Method POST -Body ($data | ConvertTo-Json).ToString() -ContentType "application/json" -UseBasicParsing | Out-Null
 }
@@ -25,6 +25,6 @@ Write-Host "Started pushing rules... " (Get-Date)
 Get-ChildItem -Path $rulespath -Filter "*.json" | foreach { PushRuleData($_)}
 Write-Host "Completed pushing rules. " (Get-Date)
 
-Write-Host "Started processing prices... " (Get-Date)
+Write-Host "Started pushing prices... " (Get-Date)
 Get-ChildItem -Path $pricespath -Filter "*.json" | foreach { PushPriceData($_)}
-Write-Host "Completed processing prices. " (Get-Date)
+Write-Host "Completed pushing prices. " (Get-Date)
