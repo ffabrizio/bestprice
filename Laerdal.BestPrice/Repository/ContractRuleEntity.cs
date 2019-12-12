@@ -11,8 +11,9 @@ namespace Laerdal.BestPrice.Repository
         [JsonProperty("pk")]
         public string PartitionKey { get; set; }
 
-        public string AttributeName { get; set; }
-        public string AttributeValue { get; set; }
+        public string ProductGroup { get; set; }
+        public string ProductLine { get; set; }
+        public string ProductType { get; set; }
         public decimal DiscountValue { get; set; }
         public decimal Quantity { get; set; } = 1;
         public DateTime ValidFrom { get; set; }

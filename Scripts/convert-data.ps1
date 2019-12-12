@@ -2,6 +2,8 @@
 $rulespath = $path + "discount-rules.csv"
 $contractspath = $path + "contract-types.csv"
 $pricespath = $path + "contracted-prices.csv"
+$mappedrulespath = $path + "contract-rules/"
+$mappedpricespath = $path + "contracted-prices/"
 
 $rulesSource = Get-Content $rulespath | Out-String | ConvertFrom-Csv
 $contractsSource = Get-Content $contractspath | Out-String | ConvertFrom-Csv
@@ -9,6 +11,9 @@ $pricesSource = Get-Content $pricespath | Out-String | ConvertFrom-Csv
 
 $Rules = @()
 $Prices = @()
+
+New-Item -ItemType Directory -Force -Path $mappedrulespath | Out-Null
+New-Item -ItemType Directory -Force -Path $mappedpricespath | Out-Null
 
 function CreatePrice {
  param( [object]$price )
@@ -25,11 +30,19 @@ function CreatePrice {
     $validto = [datetime] $price.SBQQ__ExpirationDate__c
  }
 
+ $percentage = 0
+ $discount = $price.SBQQ__Price__c
+ if ($price.SBQQ__Discount__c-ne $null -and $price.SBQQ__Discount__c -ne "")
+ {
+  $percentage = 1
+  $discount = $price.SBQQ__Discount__c
+ }
+
  $props = @{
     customerNumber = $price."SBQQ__Account__r.AccountNumber"
-    discountValue = [decimal] $price.SBQQ__Discount__c
+    discountValue = [decimal] $discount
     sku = $price."SBQQ__Product__r.ProductCode"
-    isPercentageValue = [bool] 1
+    isPercentageValue = [bool] $percentage
     validFrom = $validfrom 
     validTo = $validto
  }
@@ -40,19 +53,6 @@ function CreatePrice {
 
 function CreateRule {
  param( [object]$rule )
-
- if ($rule."Item Type") {
-    $attrname = "ProductType"
-    $attrvalue = $rule."Item Type"
- }
- if ($rule."Product Line") {
-    $attrname = "ProductLine"
-    $attrvalue = $rule."Product Line"
- }
- if ($rule."Product Group") {
-    $attrname = "ProductGroup"
-    $attrvalue = $rule."Product Group"
- }
 
  $validfrom = (Get-Date)
  $validto = (Get-Date).AddYears(1)
@@ -69,8 +69,9 @@ function CreateRule {
  $props = @{
     contractTypeId = $rule."Contract Type"
     discountValue = [decimal] $rule."Discount (%)"
-    attributeName = $attrname
-    attributeValue = $attrvalue
+    productGroup = $rule."Product Group"
+    productLine = $rule."Product Line"
+    productType = $rule."Item Type"
     validFrom = $validfrom
     validTo = $validto
  }

@@ -4,8 +4,10 @@ namespace Laerdal.BestPrice.Models
 {
     public interface IContractRule
     {
-        string AttributeName { get; set; }
-        string AttributeValue { get; set; }
+        string ProductGroup { get; set; }
+        string ProductLine { get; set; }
+        string ProductType { get; set; }
+
         decimal DiscountValue { get; set; }
         decimal Quantity { get; set; }
         DateTime ValidFrom { get; set; }

@@ -40,8 +40,9 @@ namespace Laerdal.BestPrice.Extensions
             {
                 Id = !string.IsNullOrEmpty(id) ? id : Guid.NewGuid().ToString(),
                 PartitionKey = pk,
-                AttributeName = model.AttributeName,
-                AttributeValue = model.AttributeValue,
+                ProductGroup = model.ProductGroup,
+                ProductLine = model.ProductLine,
+                ProductType = model.ProductType,
                 DiscountValue = model.DiscountValue,
                 Quantity = model.Quantity,
                 ValidFrom = model.ValidFrom > DateTime.MinValue ? model.ValidFrom : DateTime.UtcNow,
@@ -53,8 +54,9 @@ namespace Laerdal.BestPrice.Extensions
         {
             return new ContractRule
             {
-                AttributeName = entity.AttributeName,
-                AttributeValue = entity.AttributeValue,
+                ProductGroup = entity.ProductGroup,
+                ProductLine = entity.ProductLine,
+                ProductType = entity.ProductType,
                 DiscountValue = entity.DiscountValue,
                 Quantity = entity.Quantity,
                 ValidFrom = entity.ValidFrom,
