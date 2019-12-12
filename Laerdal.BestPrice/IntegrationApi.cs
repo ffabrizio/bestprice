@@ -26,7 +26,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation($"Executing with input: {id}");
+            log.LogInformation($"[admin] Loading contract [{id}]");
 
             return await _repository.GetContractTypeAsync(id);
         }
@@ -38,7 +38,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation($"Executing with input: {req.ContractTypeId}");
+            log.LogInformation($"[admin] Updating contract [{req.ContractTypeId}]");
 
             return await _repository.UpsertContractTypeAsync(req);
         }
@@ -49,7 +49,7 @@ namespace Laerdal.BestPrice
             ContractType req,
             ILogger log)
         {
-            log.LogInformation($"Executing with input: {req.ContractTypeId}");
+            log.LogInformation($"[admin] Deleting contract [{req.ContractTypeId}]");
 
             return await _repository.DeleteContractTypeAsync(req.ContractTypeId);
         }
@@ -62,7 +62,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation($"Executing with input: {id}");
+            log.LogInformation($"[admin] Loading contracted prices [{id}]");
 
             return await _repository.GetCustomerPricesAsync(id);
         }
@@ -73,7 +73,7 @@ namespace Laerdal.BestPrice
             CustomerPrices req,
             ILogger log)
         {
-            log.LogInformation($"Executing with input: {req.CustomerNumber}");
+            log.LogInformation($"[admin] Updating contracted prices [{req.CustomerNumber}]");
 
             return await _repository.UpsertCustomerPricesAsync(req);
         }
@@ -85,7 +85,7 @@ namespace Laerdal.BestPrice
             ILogger log)
         {
 
-            log.LogInformation($"Executing with input: {req.CustomerNumber}");
+            log.LogInformation($"[admin] Deleting contracted prices [{req.CustomerNumber}]");
 
             return await _repository.DeleteCustomerPricesAsync(req.CustomerNumber);
         }

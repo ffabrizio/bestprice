@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Laerdal.BestPrice.Models
 {
@@ -14,7 +15,8 @@ namespace Laerdal.BestPrice.Models
 
         public override string ToString()
         {
-            return $"[{ProductGroup} / {ProductLine} / {ProductType}] {DiscountValue}%";
+            var values = new[] { ProductGroup, ProductLine, ProductType }.Where(v => !string.IsNullOrEmpty(v));
+            return $"[{string.Join(" / ", values)}] {DiscountValue}%";
         }
     }
 }

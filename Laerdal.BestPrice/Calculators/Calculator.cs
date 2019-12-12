@@ -41,14 +41,14 @@ namespace Laerdal.BestPrice.Calculators
 
                 if (contractType?.ContractRules != null)
                 {
-                    _logger.LogInformation("Found contract type {contractType}", req.ContractTypeId);
+                    _logger.LogInformation("[{sku}] Found contract type [{contractType}]", item.Sku, req.ContractTypeId);
 
                     // Process all rules matching one of configured properties in the current SKU
                     foreach (var rule in contractType.ContractRules.GetApplicableRules(item))
                     {
                         var calculatedPrice = rule.CalculateDiscountedPrice(item.ListPrice);
 
-                        _logger.LogInformation("[{sku}] Contract type price: {calculatedPrice}. {rule}",
+                        _logger.LogInformation("[{sku}] Attribute-based price: {calculatedPrice}. [{rule}]",
                             item.Sku,
                             calculatedPrice,
                             rule);
@@ -65,7 +65,7 @@ namespace Laerdal.BestPrice.Calculators
 
                 if (customerPrices?.ContractedPrices != null)
                 {
-                    _logger.LogInformation("Found customer prices for customer number: {customerNumber}", req.CustomerNumber);
+                    _logger.LogInformation("[{sku}] Found customer prices [{customerNumber}]", item.Sku, req.CustomerNumber);
 
                     // Process all contracted prices for the current SKU
                     foreach (var contractedPrice in customerPrices.ContractedPrices.GetApplicablePrices(item))

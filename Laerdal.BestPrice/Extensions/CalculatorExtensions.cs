@@ -29,23 +29,22 @@ namespace Laerdal.BestPrice.Extensions
 
         private static bool IsMatch(this ContractRule rule, CalculationInput input)
         {
-            var ruleValues = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(rule.ProductGroup))
-                ruleValues.Add(Constants.ProductGroup, rule.ProductGroup);
-            if (!string.IsNullOrEmpty(rule.ProductLine))
-                ruleValues.Add(Constants.ProductLine, rule.ProductLine);
-            if (!string.IsNullOrEmpty(rule.ProductType))
-                ruleValues.Add(Constants.ProductType, rule.ProductType);
-
-            var isMatch = true;
-            foreach (var item in ruleValues)
+            var ruleValues = new Dictionary<string, string>
             {
-                if (item.Key == Constants.ProductGroup && item.Value != input.ProductGroup) isMatch = false;
-                if (item.Key == Constants.ProductLine && item.Value != input.ProductLine) isMatch = false;
-                if (item.Key == Constants.ProductType && item.Value != input.ProductType) isMatch = false;
-            }
+                { Constants.ProductGroup, rule.ProductGroup },
+                { Constants.ProductLine, rule.ProductLine },
+                { Constants.ProductType, rule.ProductType }
+            };
+            var inputValues = new Dictionary<string, string>
+            {
+                { Constants.ProductGroup, input.ProductGroup },
+                { Constants.ProductLine, input.ProductLine },
+                { Constants.ProductType, input.ProductType }
+            };
 
-            return isMatch;
+            return ruleValues
+                .Where(_ => !string.IsNullOrEmpty(_.Value))
+                .All(_ => _.Value == inputValues[_.Key]);
         }
 
         public static decimal CalculateDiscountedPrice(this ContractRule rule, decimal listPrice)

@@ -22,7 +22,7 @@ namespace Laerdal.BestPrice
             CalculationRequest req,
             ILogger log)
         {
-            log.LogInformation($"Executing with input: {req.CustomerNumber}");
+            log.LogInformation($"[{req.CustomerNumber}] Calculating best prices [{req.ContractTypeId}]");
 
             var calculation = await _calculator.Calculate(req);
             return calculation;
