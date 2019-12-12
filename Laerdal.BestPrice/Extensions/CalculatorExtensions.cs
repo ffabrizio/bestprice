@@ -31,9 +31,9 @@ namespace Laerdal.BestPrice.Extensions
             return applicableRules;
         }
 
-        public static decimal CalculateDiscountedPrice(this ContractRule rule, CalculationOutput item)
+        public static decimal CalculateDiscountedPrice(this ContractRule rule, decimal listPrice)
         {
-            return item.ListPrice - item.ListPrice * rule.DiscountValue / 100;
+            return listPrice - listPrice * rule.DiscountValue / 100;
         }
 
         public static IEnumerable<ContractedPrice> GetApplicablePrices(this IEnumerable<ContractedPrice> contractedPrices, CalculationOutput item)
@@ -54,10 +54,10 @@ namespace Laerdal.BestPrice.Extensions
             return applicablePrices;
         }
 
-        public static decimal CalculateDiscountedPrice(this ContractedPrice contractedPrice, CalculationOutput item)
+        public static decimal CalculateDiscountedPrice(this ContractedPrice contractedPrice, decimal listPrice)
         {
             return contractedPrice.IsPercentageValue ?
-                item.ListPrice - item.ListPrice * contractedPrice.DiscountValue / 100 :
+                listPrice - listPrice * contractedPrice.DiscountValue / 100 :
                 contractedPrice.DiscountValue;
         }
     }
